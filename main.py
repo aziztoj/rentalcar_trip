@@ -1,30 +1,61 @@
 def get_city_distance():
   print("Choose a destination from the list below:")
-  cities = {"Andijon": 351, "Samarqand": 306, "Nukus": 1095}
+  cities = {"andijon": 351, "samarqand": 306, "nukus": 1095}
   print("Available destinations from Tashkent:")
   for city, distance in cities.items():
     print(city, ":", distance, "km")
-  city = input("Enter the destination city: ")
-  distance = cities[city]
+  city = input("Enter the destination city: ").lower()
+  if city in cities:
+    distance = cities[city]
+  else:
+    print("Invalid city. Please enter a valid city from the list.")
+    city = input(" Enter the destination city: ").lower()
+    distance = cities[city]
   return distance
 
-def convert():
-  global distance, speed
-  distance = get_city_distance() * 0.621371
-  speed = speed * 0.621371
-  return distance, speed
+def choose_car(units):
+  if units == "True":  
+      print("\nChoose a car (metric):")
+      print("M = Matiz: 144 km/h, 19.1 km/l, $11.77/hr")
+      print("F = Ferrari: 330 km/h, 16.2 km/l, $1000/hr")
+      print("B = BMW X6: 250 km/h, 17.0 km/l, $200/hr")
+  else:
+      print("\nChoose a car (imperial):")
+      print("M = Matiz: 89.4 mph, 45 mpg, $11.77/hr")
+      print("F = Ferrari: 205.6 mph, 38.2 mpg, $1000/hr")
+      print("B = BMW X6: 155.4 mph, 40 mpg, $200/hr")
+
+  choice = input("Enter M, F, or B: ").lower()
+
+  if units == "True":
+      if choice == "m":
+          return 144, 19.1, 11.77
+      elif choice == "f":
+          return 330, 16.2, 1000
+      elif choice == "b":
+          return 250, 17.0, 200
+  else:
+      if choice == "m":
+          return 89.4, 45, 11.77
+      elif choice == "f":
+          return 205.6, 38.2, 1000
+      elif choice == "b":
+          return 155.4, 40, 200
+
+def conversion(distance):
+  miles = distance * 0.621371
+  return miles
 
 def get_trip_time(distance, speed):
-  time = distance/speed
+  time = float(distance/speed)
   return time
 
-def fuelcost():
-  global fuel_cost, fuel_price
-  fuel_cost = (distance / fuel_effiency) * fuel_price
-  return fuel_cost
+def fuelcost(distance, fuel_efficiency, fuel_price):
+  f_cost = (distance / fuel_efficiency) * fuel_price
+  return f_cost
 
-def totalcost(cost):
-  total_cost = fuelcost() + (time * cost_hour)
+def totalcost(travel_time, hourly_cost, fuel_cost):
+  total_cost = fuel_cost + (travel_time * hourly_cost)
   return total_cost
 
 print("Welcome to the Rental Car Company Trip Planner!\n")
@@ -34,34 +65,16 @@ distance = get_city_distance()
 
 print("Do you want to use metric or imperial units?")
 units = input("Enter 'm' for metric or 'i' for imperial: ").lower()
-
-
-print("Choose a car from the list below:\n")
-print("Matiz: 45 mpg, 144 km/h, $11.77 per hour")
-print("Ferrari: 38.2 mpg, 330 km/h, $1,000 per hour")
-print("BMW X6: 40 mpg, 250 km/h, $200 per hour\n")
-
-car = input("Enter the car you want to rent (M for Matiz, F for Ferrari, B for BMW):").lower()
-
-if car == "m":
-  speed = 144
-  fuel_effiency = 45
-  cost_hour = 11.77
-  print("You have chosen Matiz.")
-elif car == "f":
-  speed = 330
-  fuel_effiency = 38.2
-  cost_hour = 1000
-  print("You have chosen Ferrari.")
-elif car == "b":
-  speed = 250
-  fuel_effiency = 40
-  cost_hour = 200
-  print("You have chosen BMW X6.")    
+if units == "m":
+  units = "True"
+else:
+  units = "False"
+speed, fuel_efficiency, hourly_cost = choose_car(units)
 
 if units == "i":
-  convert()
-print()
+  distance = conversion(distance)
+  print("The distance to your destination is", distance, "miles.")
+
 
 print("What is the price of fuel per liter?")
 fuel_price = float(input())
@@ -69,16 +82,17 @@ fuel_price = float(input())
 print("How long do you have available in hours?")
 available_time = int(input())
 print()
-time = int(get_trip_time(distance, speed))
-print("The trip will take", time , "hours.")
-if time < available_time:
+travel_time = int(get_trip_time(distance, speed))
+print("The trip will take", travel_time , "hours.")
+if travel_time < available_time:
   print("You have enough time for the trip.")
 else:
   print("You do not have enough time for the trip.")
 print()
-
-print("The cost of fuel for the trip will be $", fuelcost())
-print("The total cost of the trip will be $", totalcost(cost))
+fuel_cost = fuelcost(distance, fuel_efficiency, fuel_price)
+print("The cost of fuel for the trip will be $", round(fuel_cost),2)
+print("The total cost of the trip will be $", round(totalcost(travel_time, hourly_cost, fuel_cost),2))
+print("")
 print("Have a safe trip!")
 
 
