@@ -4,14 +4,14 @@ def get_city_distance():
   print("Available destinations from Tashkent:")
   for city, distance in cities.items():
     print(city, ":", distance, "km")
-  city = input("Enter the destination city: ").lower()
-  if city in cities:
-    distance = cities[city]
-  else:
-    print("Invalid city. Please enter a valid city from the list.")
-    city = input(" Enter the destination city: ").lower()
-    distance = cities[city]
-  return distance
+  
+  while True:
+    city = input("Enter the destination city: ").lower()
+    if city in cities:
+      distance = cities[city]
+      return distance
+    else:
+      print("Invalid city. Please enter a valid city from the list.")
 
 def choose_car(units):
   if units == "True":  
@@ -42,7 +42,8 @@ def choose_car(units):
       elif choice == "b":
           return 155.4, 40, 200
 
-def conversion(distance):
+def conversion():
+  global distance
   miles = distance * 0.621371
   return miles
 
@@ -69,11 +70,10 @@ if units == "m":
   units = "True"
 else:
   units = "False"
+  distance = conversion()
+  print("The distance to your destination is",round(distance,1), "miles.")
 speed, fuel_efficiency, hourly_cost = choose_car(units)
 
-if units == "i":
-  distance = conversion(distance)
-  print("The distance to your destination is", distance, "miles.")
 
 
 print("What is the price of fuel per liter?")
@@ -89,9 +89,9 @@ if travel_time < available_time:
 else:
   print("You do not have enough time for the trip.")
 print()
-fuel_cost = fuelcost(distance, fuel_efficiency, fuel_price)
-print("The cost of fuel for the trip will be $", round(fuel_cost),2)
-print("The total cost of the trip will be $", round(totalcost(travel_time, hourly_cost, fuel_cost),2))
+fuel_cost = float(fuelcost(distance, fuel_efficiency, fuel_price))
+print("The cost of fuel for the trip will be $", round(fuel_cost,1))
+print("The total cost of the trip will be $", round(totalcost(travel_time, hourly_cost, fuel_cost),1))
 print("")
 print("Have a safe trip!")
 

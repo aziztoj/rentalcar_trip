@@ -28,3 +28,26 @@ requiredFiles = [".replit", "replit.nix", ".config", "venv"]
 
 [agent]
 expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Rental Car Trip Planner"
+
+[[workflows.workflow]]
+name = "Rental Car Trip Planner"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
