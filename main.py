@@ -1,17 +1,18 @@
+units = 0
 def get_city_distance():
   print("Choose a destination from the list below:")
   cities = {"andijon": 351, "samarqand": 306, "nukus": 1095}
   print("Available destinations from Tashkent:")
   for city, distance in cities.items():
     print(city, ":", distance, "km")
-  
-  while True:
-    city = input("Enter the destination city: ").lower()
-    if city in cities:
-      distance = cities[city]
-      return distance
-    else:
-      print("Invalid city. Please enter a valid city from the list.")
+  city = input("Enter the destination city: ").lower()
+  if city in cities:
+    distance = cities[city]
+  else:
+    print("Invalid city. Please enter a valid city from the list.")
+    city = input(" Enter the destination city: ").lower()
+    distance = cities[city]
+  return distance
 
 def choose_car(units):
   if units == "True":  
@@ -26,6 +27,9 @@ def choose_car(units):
       print("B = BMW X6: 155.4 mph, 40 mpg, $200/hr")
 
   choice = input("Enter M, F, or B: ").lower()
+  while choice != "m" and choice != "f" and choice != "b":
+    print("Invalid input. Please enter M, F, or B.")
+    choice = input("Enter M, F, or B: ").lower()
 
   if units == "True":
       if choice == "m":
@@ -65,19 +69,33 @@ print("Let's plan your trip!")
 distance = get_city_distance()
 
 print("Do you want to use metric or imperial units?")
-units = input("Enter 'm' for metric or 'i' for imperial: ").lower()
-if units == "m":
-  units = "True"
-else:
-  units = "False"
-  distance = conversion()
-  print("The distance to your destination is",round(distance,1), "miles.")
+
+while units != "m" and units != "i":
+  units = input("Enter 'm' for metric or 'i' for imperial: ").lower()
+  if units == "m":
+    units = "True"
+    break
+  elif units == "i":
+    units = "False"
+    distance = conversion()
+    print("The distance to your destination is",round(distance,1), "miles.")
+    break
+  else:
+    print("Invalid input. Please enter 'm' for metric or 'i' for imperial.")
+
 speed, fuel_efficiency, hourly_cost = choose_car(units)
 
 
+fuel_price = -1
 
-print("What is the price of fuel per liter?")
-fuel_price = float(input())
+while fuel_price <0:
+  print("What is the price of fuel per liter?")
+  fuel_price = float(input())
+  if fuel_price < 0:
+    print("Invalid input. Please enter a positive number.")
+  elif isinstance(fuel_price, str):
+    print("Invalid input. Please enter a number.")
+  
 
 print("How long do you have available in hours?")
 available_time = int(input())
