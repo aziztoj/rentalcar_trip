@@ -1,0 +1,9 @@
+This is the details of your trip: 
+Tashkent to andijon.
+The distance to your destination is 351 km.
+
+You will be driving a BMW X6.
+The trip will take 1 hours.
+
+The cost of fuel for the trip will be $61.9.
+The total cost of the trip will be $261.9.
